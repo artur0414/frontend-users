@@ -9,8 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        "custom-blue": "#4CAF98",
+        "custom-yellow": "#C9AC4C",
         background: "var(--background)",
         foreground: "var(--foreground)",
+      },
+      boxShadow: {
+        'bottom': '0 2px 6px rgba(0, 0, 0, 0.1)',
       },
     },
   },
