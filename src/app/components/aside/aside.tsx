@@ -56,7 +56,6 @@ const Aside = ({ handleNavigation }: AsideProps) => {
     // Verificar el estado inicial
     setIsActiveMenu(isDesktopView.matches);
 
-    // Agregar el listener
     isDesktopView.addEventListener("change", handleChange);
 
     // Limpiar el listener cuando el componente se desmonta
