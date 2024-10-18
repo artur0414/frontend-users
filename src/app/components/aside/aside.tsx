@@ -32,10 +32,6 @@ const Aside = ({ handleNavigation }: AsideProps) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false); // Estado para verificar si el usuario es administrador
 
   // Función para manejar el cambio de tamaño de la ventana
-  const handleResize = () => {
-    const isDesktopView = window.innerWidth >= 1024;
-    setIsActiveMenu(isDesktopView);
-  };
 
   //Hook para manejar el cambio de color del menú
   useEffect(() => {
@@ -45,24 +41,29 @@ const Aside = ({ handleNavigation }: AsideProps) => {
     }
   }, []);
 
-  //Hook para verificar si el usuario es administrador se renderiza el componente cada vez que cambia la información de autenticación
+  // Hook para verificar si el usuario es administrador y manejar el cambio de tamaño
   useEffect(() => {
-    if (authInfo.data && authInfo.data.role === "admin") {
-      setIsAdmin(true);
-    }
-  }, [authInfo]);
+    // Verificar si el usuario es administrador
+    setIsAdmin((authInfo?.data && authInfo?.data?.role === "admin") || false);
 
-  //Hook para manejar el cambio de tamaño
-  useEffect(() => {
-    handleResize();
+    // Manejar el cambio de tamaño
+    const isDesktopView = window.matchMedia("(min-width: 1024px)");
 
-    window.addEventListener("resize", handleResize);
-
-    // Limpiar el evento al desmontar el componente
-    return () => {
-      window.removeEventListener("resize", handleResize);
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsActiveMenu(event.matches);
     };
-  }, []);
+
+    // Verificar el estado inicial
+    setIsActiveMenu(isDesktopView.matches);
+
+    // Agregar el listener
+    isDesktopView.addEventListener("change", handleChange);
+
+    // Limpiar el listener cuando el componente se desmonta
+    return () => {
+      isDesktopView.removeEventListener("change", handleChange);
+    };
+  }, [authInfo]);
 
   // Función para manejar el menú lateral
 
